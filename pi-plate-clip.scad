@@ -42,7 +42,8 @@ vertical_padding = 3.3;
 horizontal_padding = 3.3;
 
 // How rounded the corners should be.
-corner_radius = 2.33;
+// This should be less than both vertical_padding and horizontal_padding.
+corner_radius = 1.5;
 
 // Special OpenSCAD variable to deterine resolution of curves. Specifically, how many fragments
 // to break a circle down into. Higher means smoother curves. Lower means faster rendering.
@@ -53,18 +54,30 @@ $fn = 96;
 // ---------------------------------------------------------------
 // GEOMETRY
 
+module rounded_rect(w, h, corner_radius) {
+	// Convenience function to created a rounded rectangle.
+	// Simplest way to do this is use a minkowski function.
+	translate([corner_radius, corner_radius]) {
+		minkowski() {
+			circle(corner_radius);
+			square([w - corner_radius * 2, h - corner_radius * 2]);
+		}
+	}
+}
+
 difference() {
 	// Main rectangular area
-	square([
+	rounded_rect(
 		inset_depth + horizontal_padding, 
-		vertical_padding + pi_pcb_thickness + board_space + plate_pcb_thickness + vertical_padding]);
-	// Pi PCB cutout
+		vertical_padding + pi_pcb_thickness + board_space + plate_pcb_thickness + vertical_padding,
+		corner_radius);
+	// Pi PCB notch
 	translate([0, vertical_padding]) {
 		square([
 			inset_depth,
 			pi_pcb_thickness]);
 	}
-	// Plate PCB cutout
+	// Plate PCB notch
 	translate([0, vertical_padding + pi_pcb_thickness + board_space]) {
 		square([
 			inset_depth,
