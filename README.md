@@ -11,4 +11,6 @@ Designed to be cut out of acryllic using a laser cutter.
 
 ![Pi Plate Clip Preview](https://github.com/joewalnes/pi-plate-clip/blob/master/preview.png?raw=true)
 
--Joe Walnes
+License: [Creative Commons Attribution 3.0 Unported](http://creativecommons.org/licenses/by/3.0/)
+
+-  **Joe Walnes**: [@joewalnes](http://twitter.com/joewalnes) | [joewalnes.com](http://joewalnes.com)
