@@ -1,3 +1,5 @@
+# Run 'make' to generate DXF file. 'make clean' to clean up.
+
 all: pi-plate-clip.dxf
 
 %.dxf: %.scad
