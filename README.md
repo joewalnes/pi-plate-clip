@@ -9,4 +9,6 @@ wires into the board, it does not bend and damage the Pi connection pins.
 
 Designed to be cut out of acryllic using a laser cutter.
 
+![Pi Plate Clip Preview](https://github.com/joewalnes/pi-plate-clip/blob/master/preview.png?raw=true)
+
 -Joe Walnes
