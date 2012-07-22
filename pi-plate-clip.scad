@@ -16,9 +16,13 @@
 
 
 // ---------------------------------------------------------------
-// DIMENSIONS
+// DIMENSIONS and SETTINGS
 // Adjust these if necessary for other boards. The default settings should work for Adafruit's Pi Plate.
 // All values are in millimeters.
+
+// Number of clips to create.
+rows = 1;
+cols = 4;
 
 // Thickness of Raspberry Pi PCB.
 pi_pcb_thickness = 1.41;
@@ -45,6 +49,9 @@ horizontal_padding = 3.3;
 // This should be less than both vertical_padding and horizontal_padding.
 corner_radius = 1.5;
 
+// When creating multiple clips, how much space to leave between each one.
+space_between_clips = 1.5;
+
 // Special OpenSCAD variable to deterine resolution of curves. Specifically, how many fragments
 // to break a circle down into. Higher means smoother curves. Lower means faster rendering.
 // http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#.24fa.2C_.24fs_and_.24fn
@@ -54,9 +61,9 @@ $fn = 96;
 // ---------------------------------------------------------------
 // GEOMETRY
 
+// Convenience function to created a rounded rectangle.
+// Simplest way to do this is use a minkowski function.
 module rounded_rect(w, h, corner_radius) {
-	// Convenience function to created a rounded rectangle.
-	// Simplest way to do this is use a minkowski function.
 	translate([corner_radius, corner_radius]) {
 		minkowski() {
 			circle(corner_radius);
@@ -65,22 +72,36 @@ module rounded_rect(w, h, corner_radius) {
 	}
 }
 
-difference() {
-	// Main rectangular area
-	rounded_rect(
-		inset_depth + horizontal_padding, 
-		vertical_padding + pi_pcb_thickness + board_space + plate_pcb_thickness + vertical_padding,
-		corner_radius);
-	// Pi PCB notch
-	translate([0, vertical_padding]) {
-		square([
-			inset_depth,
-			pi_pcb_thickness]);
+// A single clip.
+module pi_plate_clip() {
+	difference() {
+		// Main rectangular area
+		rounded_rect(
+			inset_depth + horizontal_padding,
+			vertical_padding + pi_pcb_thickness + board_space + plate_pcb_thickness + vertical_padding,
+			corner_radius);
+		// Pi PCB notch
+		translate([0, vertical_padding]) {
+			square([
+				inset_depth,
+				pi_pcb_thickness]);
+		}
+		// Plate PCB notch
+		translate([0, vertical_padding + pi_pcb_thickness + board_space]) {
+			square([
+				inset_depth,
+				plate_pcb_thickness]);
+		}
 	}
-	// Plate PCB notch
-	translate([0, vertical_padding + pi_pcb_thickness + board_space]) {
-		square([
-			inset_depth,
-			plate_pcb_thickness]);
+}
+
+// Multiple clips.
+for (y =[0:rows-1]) {
+	for (x = [0:cols-1]) {
+		translate([
+			x * (inset_depth + horizontal_padding + space_between_clips),
+			y * (vertical_padding + pi_pcb_thickness + board_space + plate_pcb_thickness + vertical_padding + space_between_clips)]) {
+			pi_plate_clip();
+		}
 	}
 }
