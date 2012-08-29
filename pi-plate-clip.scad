@@ -24,11 +24,14 @@
 rows = 1;
 cols = 4;
 
+// Diameter of cutting tool (e.g. laser)
+cutter_diameter = 0.25; // Calibrated by Epilog laser on acrylic.
+
 // Thickness of Raspberry Pi PCB.
-pi_pcb_thickness = 1.41;
+pi_pcb_thickness = 1.41 - cutter_diameter;
 
 // Thickness of Pi Plate PCB (or alternative board).
-plate_pcb_thickness = 1.64;
+plate_pcb_thickness = 1.64 - cutter_diameter;
 
 // Vertical distance between the Raspberry Pi and the Pi Plate.
 // This is the inner distance - i.e. from top of Pi to bottom of Plate.
